@@ -1,5 +1,8 @@
 <template>
   <div class="login-container">
+    <a :href="imgSrc.bgLink" class="imgBgLink" target="_blank">
+      点击这里就将计就计
+    </a>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
@@ -83,7 +86,10 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      imgSrc:{ 
+        bgLink:'https://baidu.com'
+      }
     }
   },
   watch: {
@@ -182,13 +188,23 @@ $light_gray:#eee;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
+  position: relative;
+
+  .imgBgLink{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: block;
+  }
 
   .login-form {
-    position: relative;
+    position: absolute;
     width: 520px;
     max-width: 100%;
     padding: 160px 35px 0;
-    margin: 0 auto;
+    left: 70%;
+    top: 30%;
+    transform: translate(-50%,-50%);
     overflow: hidden;
   }
 
@@ -234,4 +250,5 @@ $light_gray:#eee;
     user-select: none;
   }
 }
+
 </style>
