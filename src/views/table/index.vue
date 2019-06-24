@@ -8,7 +8,12 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column align="center" label="ID" width="120">
+        <template slot="header" slot-scope="scope">
+            <div @click="showSearch">ID <i class="el-icon-caret-top"></i></div>
+            <el-input v-if="searchShow" v-model="search"size="mini" placeholder="" suffix-icon="el-icon-search"/>
+        </template> 
         <template slot-scope="scope">
           {{ scope.$index }}
         </template>
@@ -45,8 +50,11 @@
 
 <script>
 import { getList } from '@/api/table'
-
+import columnSearch from '@/components/table/columnSearch'
 export default {
+  components:{
+    columnSearch
+  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -60,7 +68,9 @@ export default {
   data() {
     return {
       list: null,
-      listLoading: true
+      listLoading: true,
+      search:null,
+      searchShow:false
     }
   },
   created() {
@@ -73,6 +83,9 @@ export default {
         this.list = response.data.items
         this.listLoading = false
       })
+    },
+    showSearch(){
+      this.searchShow=!this.searchShow
     }
   }
 }

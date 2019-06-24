@@ -14,14 +14,14 @@ import Layout from '@/layout'
  * alwaysShow: true               if set true, will always show the root menu
  *                                if not set alwaysShow, when item has more than one children route,
  *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
+ * redirect: noRedirect           如果设置noRedirect，则不会在面包屑中重定向
+ * name:'router-name'             名称由<keep-alive>(必须设置!!)使用
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
+    roles: ['admin','editor']    控制页面角色(可以设置多个角色)
     title: 'title'               the name show in sidebar and breadcrumb (recommend set)
     icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+    breadcrumb: false            如果设置为false，则该项将隐藏在breadcrumb中(默认为true)
+    activeMenu: '/example/list'  如果设置路径，侧栏将突出显示您设置的路径
   }
  */
 
@@ -47,6 +47,7 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
+    name:'Home',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
@@ -80,10 +81,12 @@ export const constantRoutes = [
   {
     path: '/form',
     component: Layout,
+    name:'Form',
+    redirect: '/form/index',
     children: [
       {
         path: 'index',
-        name: 'Form',
+        name: 'FormTool',
         component: () => import('@/views/form/index'),
         meta: { title: 'Form', icon: 'form' }
       }

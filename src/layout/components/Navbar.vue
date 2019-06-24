@@ -1,32 +1,47 @@
 <template>
-  <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
-    <breadcrumb class="breadcrumb-container" />
-
-    <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              Home
+  <div class="nav-father">
+    <div class="navbar">
+      <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+      <selectrouter class="hamburger-container"  @toggleMenu='firstMenu'/>
+      <breadcrumb class="breadcrumb-container" />
+      <div class="right-menu">
+        <el-dropdown class="avatar-container" trigger="click">
+          <div class="avatar-wrapper">
+            <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+            <i class="el-icon-caret-bottom" />
+          </div>
+          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <router-link to="/">
+              <el-dropdown-item>
+                Home
+              </el-dropdown-item>
+            </router-link>
+            <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+              <el-dropdown-item>Github</el-dropdown-item>
+            </a>
+            <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
+              <el-dropdown-item>Docs</el-dropdown-item>
+            </a>
+            <el-dropdown-item divided>
+              <span style="display:block;" @click="logout">Log Out</span>
             </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>Docs</el-dropdown-item>
-          </a>
-          <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">Log Out</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </div>
+    <div v-show="firstMenuPannel" class="first-menu-pannel">
+      <i class="el-icon-caret-top"></i>
+      <div class="first-menu-table">
+        <el-row :gutter="10">
+          <el-col :span="8"  v-for="route in menuRoutes" :key="route.path" :item="route">
+            <router-link :to="route.path">
+            <div class="grid-content bg-purple">
+              {{route.name}}
+            </div>
+            </router-link>
+          </el-col>
+        </el-row>
+      </div>
     </div>
   </div>
 </template>
@@ -35,17 +50,31 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import Selectrouter from '@/components/selectRouter'
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    Selectrouter
+  },
+  data(){
+    return{
+      firstMenuPannel:false
+    }
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar'
-    ])
+    ]),
+    menuRoutes(){
+      // this.$router.options.routes.filter((item)=>{
+      //   if(item.hidden) return item
+      // })
+      return this.$router.options.routes
+    }
+
   },
   methods: {
     toggleSideBar() {
@@ -54,12 +83,18 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    firstMenu(data){
+      this.firstMenuPannel=data
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.nav-father{
+  position: relative;
+}
 .navbar {
   height: 50px;
   overflow: hidden;
@@ -135,5 +170,23 @@ export default {
       }
     }
   }
+}
+.first-menu-pannel{
+    position: absolute;
+    top: 45px;
+    left: 10px;   
+    width: 240px;
+    z-index: 10;
+    .el-icon-caret-top:before{
+         font-size: 16px
+    }
+    .first-menu-table{
+      padding: 10px 10px;
+       background-color: rgba(0, 0, 0, .7);
+       border-radius: 5px;
+       border: 1px solid #efefef;
+       color: white
+    
+    }
 }
 </style>

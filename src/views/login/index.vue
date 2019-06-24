@@ -1,10 +1,15 @@
 <template>
   <div class="login-container">
-    <a :href="imgSrc.bgLink" class="imgBgLink" target="_blank">
-      点击这里就将计就计
-    </a>
+    <!-- <a :href="imgSrc.bgLink" class="imgBgLink" target="_blank"> -->
+    <div class="imgBgLink" >
+       <el-carousel trigger="click" height="700px">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <h3 class="small">{{ item }}</h3>
+          </el-carousel-item>
+       </el-carousel>
+    </div>
+    
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
       <div class="title-container">
         <h3 class="title">Login Form</h3>
       </div>
@@ -88,7 +93,8 @@ export default {
       passwordType: 'password',
       redirect: undefined,
       imgSrc:{ 
-        bgLink:'https://baidu.com'
+        bgLink:'https://baidu.com',
+        bgImgSrc:'/assets/404_images/404.png'
       }
     }
   },
@@ -184,7 +190,7 @@ $dark_gray:#889aa4;
 $light_gray:#eee;
 
 .login-container {
-  min-height: 100%;
+  height: 100%;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
@@ -195,17 +201,20 @@ $light_gray:#eee;
   height: 100%;
   position: relative;
   display: block;
+  background-image: url("~@/assets/404_images/404.png")
   }
 
   .login-form {
     position: absolute;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 60px 35px 60px;
     left: 70%;
-    top: 30%;
+    top: 40%;
     transform: translate(-50%,-50%);
     overflow: hidden;
+    z-index: 100;
+    background-color: #4b5e75d1;
   }
 
   .tips {
@@ -250,5 +259,19 @@ $light_gray:#eee;
     user-select: none;
   }
 }
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 150px;
+  margin: 0;
+}
 
+.el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+}
 </style>
