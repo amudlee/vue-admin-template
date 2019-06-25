@@ -9,36 +9,38 @@
       highlight-current-row
     >
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column align="center" label="ID" width="120">
+      <el-table-column prop="id" align="center" label="ID" width="120">
         <template slot="header" slot-scope="scope">
-            <div @click="showSearch">ID <i class="el-icon-caret-top"></i></div>
-            <el-input v-if="searchShow" v-model="search"size="mini" placeholder="" suffix-icon="el-icon-search"/>
+          <columnSearch :titleName='columnName.id.name' :querykey="columnName.id.querykey"></columnSearch>
         </template> 
         <template slot-scope="scope">
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column prop="title" label="Title">
+        <template slot="header" slot-scope="scope">
+          <columnSearch :titleName='columnName.title.name' :querykey='columnName.title.querykey'></columnSearch>
+        </template> 
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column prop="author" label="Author" width="110" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.author }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
+      <el-table-column prop="pageviews" label="Pageviews" width="110" align="center">
         <template slot-scope="scope">
           {{ scope.row.pageviews }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
+      <el-table-column prop="status" class-name="status-col" label="Status" width="110" align="center" :filters='tableStatus' :filter-method="filterHandler">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
+      <el-table-column prop="display_time" align="center" label="Display_time" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.display_time }}</span>
@@ -69,10 +71,19 @@ export default {
     return {
       list: null,
       listLoading: true,
-      search:null,
-      searchShow:false
+      tableStatus:[
+        {text: 'published', value:'published'},
+        {text: 'draft', value: 'draft'},
+        {text: 'deleted', value: 'deleted'}
+      ],
+      columnName:{
+        id:{name:'ID号',
+            querykey:'id'},
+        title:{name:'标题',
+              querykey:'title'}
+      }
     }
-  },
+   },
   created() {
     this.fetchData()
   },
@@ -84,9 +95,14 @@ export default {
         this.listLoading = false
       })
     },
-    showSearch(){
-      this.searchShow=!this.searchShow
+    filterHandler(value, row, column){
+      const property = column['property'];
+      /**表格的每一列的props最好和返回来的数据的字段名称 */
+      return row[property] === value;
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+ 
+</style>
